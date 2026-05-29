@@ -241,7 +241,7 @@ export function SuggestRepoModal({ open, onClose }: SuggestRepoModalProps) {
 
               {/* dropdown suggestions */}
               {techInput && filteredTech.length > 0 && (
-                <div className="mt-2 border rounded-lg bg-white dark:bg-gray-800 max-h-40 overflow-auto">
+                <div className="mt-2 border rounded-lg bg-white dark:bg-gray-800 max-h-40 overflow-auto z-20 relative">
                   {filteredTech.slice(0, 6).map((tech) => (
                     <div
                       key={tech}
@@ -262,14 +262,15 @@ export function SuggestRepoModal({ open, onClose }: SuggestRepoModalProps) {
                     className="flex items-center gap-1 px-2 py-1 rounded-md bg-purple-100 dark:bg-purple-900 text-sm"
                   >
                     {tech}
-                    <button
+                    <Button
                       type="button"
-                      onClick={() =>
-                        setTechList((prev) => prev.filter((t) => t !== tech))
-                      }
+                      variant="ghost"
+                      mode="icon"
+                      size="sm"
+                      onClick={() => setTechList((prev) => prev.filter((t) => t !== tech))}
                     >
                       <X className="w-3 h-3" />
-                    </button>
+                    </Button>
                   </span>
                 ))}
               </div>
@@ -298,7 +299,13 @@ export function SuggestRepoModal({ open, onClose }: SuggestRepoModalProps) {
               type="submit"
               variant="mono"
               size="lg"
-              disabled={mutation.isPending}
+              disabled={
+                mutation.isPending ||
+                !!urlError ||
+                !form.url.trim() ||
+                !form.name.trim() ||
+                !form.owner.trim()
+              }
               className="w-full rounded-xl"
             >
               {mutation.isPending ? (
